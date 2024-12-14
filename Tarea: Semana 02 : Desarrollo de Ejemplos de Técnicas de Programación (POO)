@@ -1,0 +1,141 @@
+#1.-Abstracción
+import turtle
+
+class FiguraGeometrica:
+    def __init__(self, color, x, y):
+        self.color = color
+        self.x = x
+        self.y = y
+
+    def dibujar(self):
+        pass  # Método abstracto, será implementado por las subclases
+
+class Ojo(FiguraGeometrica):
+    def dibujar(self):
+        turtle.penup()
+        turtle.goto(self.x, self.y)
+        turtle.pendown()
+        turtle.color(self.color)
+        turtle.circle(20)
+
+class Pico(FiguraGeometrica):
+    def dibujar(self):
+        # ... Implementación del dibujo del pico ...
+
+# ... Otras clases para representar otras partes de la imagen ...
+
+# Creando objetos y dibujando la imagen
+ojo_izquierdo = Ojo("azul", -50, 50)
+ojo_derecho = Ojo("verde", 50, 50)
+pico = Pico("amarillo", 0, -30)
+
+ojo_izquierdo.dibujar()
+ojo_derecho.dibujar()
+pico.dibujar()
+
+turtle.done()
+
+
+
+
+
+#2.-Encapsulación
+class Usuario:
+    def __init__(self, nombre, edad, correo_electronico):
+        self.__nombre = nombre  # Atributo privado
+        self.__edad = edad
+        self.__correo_electronico = correo_electronico
+
+    def obtener_nombre(self):
+        return self.__nombre
+
+    def obtener_edad(self):
+        return self.__edad
+
+    def obtener_correo_electronico(self):
+        return self.__correo_electronico
+
+    def establecer_nombre(self, nuevo_nombre):
+        self.__nombre = nuevo_nombre
+
+# Creando un objeto de la clase Usuario
+usuario1 = Usuario("Juan Pérez", 30, "juanperez@example.com")
+
+# Accediendo a los datos del usuario de forma controlada
+print(usuario1.obtener_nombre())  # Imprime: Juan Pérez
+print(usuario1.obtener_edad())    # Imprime: 30
+
+# Modificando los datos del usuario
+usuario1.establecer_nombre("Carlos Gómez")
+print(usuario1.obtener_nombre())  # Imprime: Carlos Gómez
+
+
+
+
+
+#3.-Herencia
+class Persona:
+    def __init__(self, nombre, edad, genero):
+        self.nombre = nombre
+        self.edad = edad
+        self.genero = genero
+
+    def mostrar_info(self):
+        print(f"Nombre: {self.nombre}")
+        print(f"Edad: {self.edad}")
+        print(f"Género: {self.genero}")
+
+class Hijo(Persona):
+    def __init__(self, nombre, edad, genero, cromosoma):
+        super().__init__(nombre, edad, genero)
+        self.cromosoma = cromosoma
+
+    def mostrar_info(self):
+        super().mostrar_info()
+        print(f"Cromosoma sexual: {self.cromosoma}")
+
+# Creación de objetos
+padre = Persona("Juan", 35, "Masculino")
+madre = Persona("María", 32, "Femenino")
+
+hijo1 = Hijo("Pedro", 10, "Masculino", "XY")
+hija1 = Hijo("Ana", 8, "Femenino", "XX")
+hijo2 = Hijo("Luis", 6, "Masculino", "XY")
+hija2 = Hijo("Sofía", 4, "Femenino", "XX")
+
+
+
+
+
+#4.-Polimorfismo
+class Vehiculo:
+    def __init__(self, marca, modelo):
+        self.marca = marca
+        self.modelo = modelo
+
+    def acelerar(self):
+        print("El vehículo está acelerando.")
+
+    def frenar(self):
+        print("El vehículo está frenando.")
+
+class Coche(Vehiculo):
+    def __init__(self, marca, modelo, numero_puertas):
+        super().__init__(marca, modelo)
+        self.numero_puertas = numero_puertas
+
+class Motocicleta(Vehiculo):
+    def __init__(self, marca, modelo, cilindrada):
+        super().__init__(marca, modelo)
+        self.cilindrada = cilindrada
+
+# Creando objetos
+mi_coche = Coche("Toyota", "Corolla", 4)
+mi_moto = Motocicleta("Honda", "CBR", 600)
+
+# Utilizando el polimorfismo
+vehiculos = [mi_coche, mi_moto]
+
+for vehiculo in vehiculos:
+    vehiculo.acelerar()
+    vehiculo.frenar()
