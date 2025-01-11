@@ -1,0 +1,53 @@
+class Mesa:
+    def __init__(self, numero):
+        self.numero = numero
+        self.ocupada = False
+        self.pedido = []
+
+    def ocupar(self):
+        self.ocupada = True
+
+    def liberar(self):
+        self.ocupada = False
+        self.pedido = []
+
+class Comida:
+    def __init__(self, nombre, precio):
+        self.nombre = nombre
+        self.precio = precio
+
+class Camarero:
+    def __init__(self, nombre):
+        self.nombre = nombre
+
+    def tomar_pedido(self, mesa, comida):
+        mesa.pedido.append(comida)
+
+    def servir_plato(self, mesa):
+        # Simulación de servir un plato
+        print(f"El camarero {self.nombre} está sirviendo un plato a la mesa {mesa.numero}")
+        mesa.pedido.pop(0)  # Elimina el primer plato del pedido
+
+class Cliente:
+    def __init__(self, nombre):
+        self.nombre = nombre
+
+    def realizar_pedido(self, mesa, camarero, comida):
+        camarero.tomar_pedido(mesa, comida)
+
+# Ejemplo de uso
+mesa1 = Mesa(1)
+camarero1 = Camarero("Juan")
+cliente1 = Cliente("Pedro")
+
+comida1 = Comida("Hamburguesa", 10)
+comida2 = Comida("Papas fritas", 5)
+
+cliente1.realizar_pedido(mesa1, camarero1, comida1)
+cliente1.realizar_pedido(mesa1, camarero1, comida2)
+
+camarero1.servir_plato(mesa1)
+
+# Calcular la cuenta (ejemplo simplificado)
+total = sum(comida.precio for comida in mesa1.pedido)
+print(f"El total de la cuenta es: {total}")
