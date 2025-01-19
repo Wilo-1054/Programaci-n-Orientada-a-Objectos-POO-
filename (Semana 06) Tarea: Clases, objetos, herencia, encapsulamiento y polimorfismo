@@ -1,0 +1,21 @@
+class Pelicula:
+    def __init__(self, titulo, año, genero):
+        self.__titulo = titulo
+        self.__año = año
+        self.__genero = genero
+        self.__duracion = None
+        self.__calificacion = None
+
+    # ... (resto del código original)
+
+    def get_titulo(self):
+        return self.__titulo
+
+
+class Pelicula3D(Pelicula):
+    def __init__(self, titulo, año, genero, formato_3D):
+        super().__init__(titulo, año, genero)
+        self.__formato_3D = formato_3D
+
+    def get_formato_3D(self):
+        return self.__formato_3D
