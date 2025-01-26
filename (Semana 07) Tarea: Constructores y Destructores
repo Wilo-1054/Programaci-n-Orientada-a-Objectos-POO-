@@ -1,0 +1,17 @@
+class Perro:
+    def __init__(self, nombre, raza):
+        self.nombre = nombre
+        self.raza = raza
+        print(f"¡Hola! Soy {self.nombre}, un perro de raza {self.raza}.")
+
+    def ladrar(self):
+        print("¡Guau!")
+
+    def __del__(self):
+        print(f"{self.nombre} ha dejado de existir.")
+
+# Creando un objeto de la clase Perro
+mi_perro = Perro("Max", "Labrador")
+mi_perro.ladrar()
+
+# Al salir del bloque, el destructor se llama automáticamente
