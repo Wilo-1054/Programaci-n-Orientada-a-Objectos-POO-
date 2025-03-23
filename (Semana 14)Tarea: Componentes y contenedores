@@ -1,0 +1,79 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+from tkcalendar import DateEntry
+import re  # Para validación de la hora
+
+class AgendaApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Agenda Personal")
+        self.root.geometry("600x400")  # Aumenta el tamaño para mejor visualización
+
+        # Estilo para los widgets ttk
+        style = ttk.Style()
+        style.configure("Treeview.Heading", font=('Arial', 10, 'bold'))
+
+        # Frame de entrada de datos
+        frame_input = ttk.Frame(root, padding="10")
+        frame_input.pack(pady=10, fill=tk.X)
+
+        ttk.Label(frame_input, text="Fecha:").grid(row=0, column=0, padx=5, pady=5, sticky="w")
+        self.date_entry = DateEntry(frame_input, width=12, background='darkblue', foreground='white', borderwidth=2)
+        self.date_entry.grid(row=0, column=1, padx=5, pady=5, sticky="ew")
+
+        ttk.Label(frame_input, text="Hora:").grid(row=1, column=0, padx=5, pady=5, sticky="w")
+        self.time_entry = ttk.Entry(frame_input, width=15)
+        self.time_entry.grid(row=1, column=1, padx=5, pady=5, sticky="ew")
+
+        ttk.Label(frame_input, text="Descripción:").grid(row=2, column=0, padx=5, pady=5, sticky="w")
+        self.desc_entry = ttk.Entry(frame_input, width=30)
+        self.desc_entry.grid(row=2, column=1, padx=5, pady=5, sticky="ew")
+
+        # Botones
+        frame_buttons = ttk.Frame(root, padding="10")
+        frame_buttons.pack(pady=10, fill=tk.X)
+
+        ttk.Button(frame_buttons, text="Agregar Evento", command=self.agregar_evento).pack(side=tk.LEFT, padx=5)
+        ttk.Button(frame_buttons, text="Eliminar Evento", command=self.eliminar_evento).pack(side=tk.LEFT, padx=5)
+        ttk.Button(frame_buttons, text="Salir", command=root.quit).pack(side=tk.LEFT, padx=5)
+
+        # TreeView para mostrar eventos
+        self.tree = ttk.Treeview(root, columns=("Fecha", "Hora", "Descripción"), show="headings")
+        self.tree.heading("Fecha", text="Fecha")
+        self.tree.heading("Hora", text="Hora")
+        self.tree.heading("Descripción", text="Descripción")
+        self.tree.column("Fecha", minwidth=100)  # Ancho mínimo
+        self.tree.column("Hora", minwidth=80)
+        self.tree.column("Descripción", minwidth=200)
+        self.tree.pack(pady=20, padx=10, fill=tk.BOTH, expand=True)
+
+    def agregar_evento(self):
+        fecha = self.date_entry.get()
+        hora = self.time_entry.get()
+        descripcion = self.desc_entry.get()
+
+        # Validar la hora
+        if not re.match(r"^\d{2}:\d{2}$", hora):
+            messagebox.showwarning("Formato de hora inválido", "Por favor, introduzca la hora en formato HH:MM")
+            return
+
+        if fecha and hora and descripcion:
+            self.tree.insert("", tk.END, values=(fecha, hora, descripcion))
+            self.time_entry.delete(0, tk.END)
+            self.desc_entry.delete(0, tk.END)
+            self.date_entry.focus_set()  # Enfocar el primer campo
+        else:
+            messagebox.showwarning("Entrada inválida", "Por favor, complete todos los campos")
+
+    def eliminar_evento(self):
+        seleccionado = self.tree.selection()
+        if seleccionado:
+            if messagebox.askyesno("Confirmación", "¿Desea eliminar este evento?"):
+                self.tree.delete(seleccionado)
+        else:
+            messagebox.showwarning("Eliminar Evento", "Por favor, seleccione un evento para eliminar")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = AgendaApp(root)
+    root.mainloop()
