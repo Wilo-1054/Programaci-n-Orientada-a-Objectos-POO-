@@ -1,0 +1,52 @@
+import tkinter as tk
+
+def agregar_tarea(event=None):  # Permite llamar desde el botón o Enter
+    tarea = entrada_tarea.get()
+    if tarea:
+        lista_tareas.append(tarea)
+        listbox_tareas.insert(tk.END, tarea)
+        entrada_tarea.delete(0, tk.END)
+
+def marcar_completada():
+    try:
+        indice = listbox_tareas.curselection()[0]
+        tarea = lista_tareas[indice]
+        lista_tareas[indice] = "Hecho: " + tarea
+        listbox_tareas.delete(indice)
+        listbox_tareas.insert(indice, "Hecho: " + tarea)
+    except IndexError:
+        pass  # No se seleccionó ninguna tarea
+
+def eliminar_tarea():
+    try:
+        indice = listbox_tareas.curselection()[0]
+        lista_tareas.pop(indice)
+        listbox_tareas.delete(indice)
+    except IndexError:
+        pass
+
+# Configuración de la ventana principal
+ventana = tk.Tk()
+ventana.title("Lista de Tareas")
+
+# Widgets
+entrada_tarea = tk.Entry(ventana, width=50)
+boton_agregar = tk.Button(ventana, text="Añadir Tarea", command=agregar_tarea)
+boton_completada = tk.Button(ventana, text="Marcar como Completada", command=marcar_completada)
+boton_eliminar = tk.Button(ventana, text="Eliminar Tarea", command=eliminar_tarea)
+listbox_tareas = tk.Listbox(ventana, width=60)
+
+# Organización de widgets
+entrada_tarea.grid(row=0, column=0, columnspan=3, padx=10, pady=10)
+boton_agregar.grid(row=1, column=0, padx=5, pady=5)
+boton_completada.grid(row=1, column=1, padx=5, pady=5)
+boton_eliminar.grid(row=1, column=2, padx=5, pady=5)
+listbox_tareas.grid(row=2, column=0, columnspan=3, padx=10, pady=10)
+
+# Manejo de eventos
+entrada_tarea.bind("<Return>", agregar_tarea)
+
+# Lista de tareas
+lista_tareas = []
+
+ventana.mainloop()
