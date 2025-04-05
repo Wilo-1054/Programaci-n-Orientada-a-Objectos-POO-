@@ -1,0 +1,64 @@
+import tkinter as tk
+from tkinter import ttk
+
+class GestorTareas:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Gestor de Tareas")
+
+        self.tarea_entry = tk.Entry(root)
+        self.tarea_entry.pack(pady=5, padx=10, fill=tk.X)
+        self.tarea_entry.bind("<Return>", self.agregar_tarea)
+
+        botones_frame = tk.Frame(root)
+        botones_frame.pack(pady=5)
+
+        self.agregar_btn = tk.Button(botones_frame, text="Añadir", command=self.agregar_tarea)
+        self.agregar_btn.pack(side=tk.LEFT, padx=5)
+
+        self.completar_btn = tk.Button(botones_frame, text="Completar", command=self.marcar_completada)
+        self.completar_btn.pack(side=tk.LEFT, padx=5)
+
+        self.eliminar_btn = tk.Button(botones_frame, text="Eliminar", command=self.eliminar_tarea)
+        self.eliminar_btn.pack(side=tk.LEFT, padx=5)
+
+        self.lista_tareas = tk.Listbox(root)
+        self.lista_tareas.pack(pady=10, padx=10, fill=tk.BOTH, expand=True)
+
+        root.bind("c", self.marcar_completada_teclado)
+        root.bind("C", self.marcar_completada_teclado)
+        root.bind("<Delete>", self.eliminar_tarea_teclado)
+        root.bind("d", self.eliminar_tarea_teclado)
+        root.bind("D", self.eliminar_tarea_teclado)
+        root.bind("<Escape>", lambda event: root.quit())
+
+    def agregar_tarea(self, event=None):
+        nueva_tarea = self.tarea_entry.get()
+        if nueva_tarea:
+            self.lista_tareas.insert(tk.END, nueva_tarea)
+            self.tarea_entry.delete(0, tk.END)
+
+    def marcar_completada(self):
+        seleccionado_indices = self.lista_tareas.curselection()
+        if seleccionado_indices:
+            indice = seleccionado_indices[0]
+            tarea = self.lista_tareas.get(indice)
+            if not tarea.startswith("[Completada] "):
+                self.lista_tareas.delete(indice)
+                self.lista_tareas.insert(indice, "[Completada] " + tarea)
+
+    def marcar_completada_teclado(self, event):
+        self.marcar_completada()
+
+    def eliminar_tarea(self):
+        seleccionado_indices = self.lista_tareas.curselection()
+        if seleccionado_indices:
+            self.lista_tareas.delete(seleccionado_indices[0])
+
+    def eliminar_tarea_teclado(self, event):
+        self.eliminar_tarea()
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = GestorTareas(root)
+    root.mainloop()
